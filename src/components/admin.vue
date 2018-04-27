@@ -10,9 +10,9 @@
                 <input type="text" v-model="assignee">
             </div>
         </div>
-        <div class="control-panel" v-for="(assignee, idx) in assignees">
+        <div class="control-panel" v-for="assignee in assignees">
             <div class="control-panel__title">
-                <button class="add_task" @click="sendTaskToAssignee(assigneeKeys[idx])">
+                <button class="add_task" @click="sendTaskToAssignee(assignee)">
                     Add Task For: {{ assignee }}
                 </button>
             </div>
@@ -28,32 +28,26 @@
     export default {
         name: 'admin',
         props: [
-            'db'
+            'assignees',
+            'assigneeKeys',
+            'database'
         ],
         data () {
             return {
                 assignee: '',
-                assignees: [],
-                assigneeKeys: [],
-                database: this.$props.db.ref('/'),
                 task: ''
             }
         },
         methods: {
             sendAssignee() {
-                this.$props.db.ref(`/${this.assignee}`).set(this.assignee)
+                this.$props.database.ref(`/${this.assignee}`).set(this.assignee)
             },
             sendTaskToAssignee(assignee) {
-                this.$props.db.ref(`/${assignee}/tasks`).push(this.task)
+                this.$props.database.ref(`/${assignee}/tasks`).push(this.task)
             }
         },
         mounted() {
-            this.database.on('value', (snapshot) => {
-                this.assignees = Object.keys(snapshot.val())
-                snapshot.forEach((childSnap) => {
-                    this.assigneeKeys.push(childSnap.key)
-                })
-            })
+
         }
     }
 </script>

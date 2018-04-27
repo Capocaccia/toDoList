@@ -1,7 +1,15 @@
 <template>
   <div id="app">
-    <admin :db="db"/>
-    <toDo :db="db"/>
+    <admin
+        :assignees="assignees"
+        :assigneeKeys="assigneeKeys"
+        :database="database"
+    />
+    <toDo
+      :assignees="assignees"
+      :tasks="tasks"
+      :database="database"
+    />
   </div>
 </template>
 
@@ -18,15 +26,25 @@ export default {
   },
   data () {
       return {
-        db : db.database(),
-        assignees: null
+        assigneeKeys: [],
+        database: db.database(),
+        dbRoot: db.database().ref('/'),
+        assignees: null,
+        tasks:[]
       }
   },
   methods: {
 
   },
   mounted() {
-
+      this.dbRoot.on('value', (snapshot) => {
+          this.assignees = Object.keys(snapshot.val())
+          snapshot.forEach((childSnap) => {
+              let tasks = Object.values(childSnap.val().tasks)
+              this.tasks.push(tasks.length > 0 ? tasks : [])
+              this.assigneeKeys.push(childSnap.key)
+          })
+      })
   }
 }
 
