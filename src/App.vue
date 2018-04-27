@@ -1,19 +1,38 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld/>
+    <admin/>
+    <toDo/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+  import db from './firebaseConfig'
+  import toDo from './components/toDo'
+  import admin from './components/admin'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    toDo,
+    admin
+  },
+  data () {
+      return {
+
+      }
+  },
+  methods: {
+
+  },
+  mounted() {
+      db.database().ref().once('value').then(function(snapshot){
+          return snapshot.child().val();
+      }).then((result) => {
+          console.log(result)
+      })
   }
 }
+
 </script>
 
 <style>
