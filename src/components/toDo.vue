@@ -8,7 +8,9 @@
 
 export default {
   name: 'toDo',
-  props: ['postTitle'],
+  props: [
+      'db'
+  ],
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <admin/>
-    <toDo/>
+    <admin :db="db"/>
+    <toDo :db="db"/>
   </div>
 </template>
 
@@ -18,18 +18,15 @@ export default {
   },
   data () {
       return {
-
+        db : db.database(),
+        assignees: null
       }
   },
   methods: {
 
   },
   mounted() {
-      db.database().ref().once('value').then(function(snapshot){
-          return snapshot.child().val();
-      }).then((result) => {
-          console.log(result)
-      })
+
   }
 }
 
