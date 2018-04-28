@@ -8,6 +8,7 @@
     <toDo
       :assignees="assignees"
       :tasks="tasks"
+      :taskKeys="taskKeys"
       :database="database"
     />
   </div>
@@ -30,7 +31,8 @@ export default {
         database: db.database(),
         dbRoot: db.database().ref('/'),
         assignees: null,
-        tasks:[]
+        tasks:[],
+        taskKeys:[]
       }
   },
   methods: {
@@ -38,10 +40,16 @@ export default {
   },
   mounted() {
       this.dbRoot.on('value', (snapshot) => {
-          this.assignees = Object.keys(snapshot.val())
+          this.assignees = snapshot.val() ? Object.keys(snapshot.val()) : []
           snapshot.forEach((childSnap) => {
-              let tasks = Object.values(childSnap.val().tasks)
-              this.tasks.push(tasks.length > 0 ? tasks : [])
+
+              this.taskKeys = []
+      this.tasks = []
+              let tasks = childSnap.val().tasks ? Object.values(childSnap.val().tasks): []
+              let taskKeys = childSnap.val().tasks ? Object.keys(childSnap.val().tasks): []
+
+              this.taskKeys.push(taskKeys)
+              this.tasks.push(tasks)
               this.assigneeKeys.push(childSnap.key)
           })
       })

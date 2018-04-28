@@ -4,8 +4,9 @@
       <div class="list-title">
         Tasks For: {{ assignee }}
       </div>
-      <div class="task" v-for="task in tasks[idx]">
-        {{ task }} <input type="checkbox" @click="completeTask(assignee, task.key)">
+      <div class="task" v-for="(task, idx2) in tasks[idx]">
+        <span :class="{task__complete : task.complete}"> {{ task.task }} </span>
+        <input type="checkbox" @click="completeTask(assignee, taskKeys[idx][idx2])">
       </div>
     </div>
   </div>
@@ -18,6 +19,7 @@ export default {
   props: [
       'assignees',
       'tasks',
+      'taskKeys',
       'database'
   ],
   data () {
@@ -26,8 +28,13 @@ export default {
   },
   methods: {
       completeTask(assignee, key) {
-          this.$props.database.ref(`/${assignee}/tasks/${key}`).update({})
-      },
+          let update = {}
+          this.$props.database.ref(`/${assignee}/tasks/${key}/complete`).once('value')
+              .then((snapshot) => {
+                    snapshot.val() ? update[`/${assignee}/tasks/${key}/complete`] = false : update[`/${assignee}/tasks/${key}/complete`] = true
+                    this.$props.database.ref().update(update)
+                })
+      }
   },
   mounted() {
 

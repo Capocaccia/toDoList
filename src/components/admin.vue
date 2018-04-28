@@ -40,10 +40,13 @@
         },
         methods: {
             sendAssignee() {
-                this.$props.database.ref(`/${this.assignee}`).set(this.assignee)
+                if(this.assignee.length > 0) {
+                    this.$props.database.ref(`/${this.assignee}`).set(this.assignee)
+                }
             },
             sendTaskToAssignee(assignee) {
-                this.$props.database.ref(`/${assignee}/tasks`).push(this.task)
+                this.$props.database.ref(`/${assignee}/tasks`).push({task: this.task,
+                complete: false})
             }
         },
         mounted() {
