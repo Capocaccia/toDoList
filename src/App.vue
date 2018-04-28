@@ -1,9 +1,15 @@
 <template>
   <div id="app">
+    <div class="admin-controls" v-if="!loggedIn">
+      <button @click="adminInput = !adminInput">Admin</button>
+      <input v-if="adminInput" v-model="password" type="password">
+      <button @click="checkAdminAccess">Submit</button>
+    </div>
     <admin
         :assignees="assignees"
         :assigneeKeys="assigneeKeys"
         :database="database"
+        :loggedIn="loggedIn"
     />
     <toDo
       :assignees="assignees"
@@ -32,19 +38,27 @@ export default {
         dbRoot: db.database().ref('/'),
         assignees: null,
         tasks:[],
-        taskKeys:[]
+        taskKeys:[],
+        adminInput: false,
+        password: '',
+        loggedIn: false
       }
   },
   methods: {
-
+    checkAdminAccess() {
+      console.log('here')
+      if(this.password.toLowerCase() === '212ericson'){
+        this.loggedIn = true
+      }
+    }
   },
   mounted() {
       this.dbRoot.on('value', (snapshot) => {
           this.assignees = snapshot.val() ? Object.keys(snapshot.val()) : []
-          snapshot.forEach((childSnap) => {
-
-              this.taskKeys = []
-      this.tasks = []
+          this.taskKeys = []
+          this.tasks = []
+          this.assigneeKeys = []
+            snapshot.forEach((childSnap) => {
               let tasks = childSnap.val().tasks ? Object.values(childSnap.val().tasks): []
               let taskKeys = childSnap.val().tasks ? Object.keys(childSnap.val().tasks): []
 

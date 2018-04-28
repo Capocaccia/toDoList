@@ -1,5 +1,5 @@
 <template>
-    <div class="admin">
+    <div class="admin" v-if="loggedIn">
         <div class="control-panel">
             <div class="control-panel__title" @click="sendAssignee">
                 <button class="assignee-add">
@@ -30,7 +30,8 @@
         props: [
             'assignees',
             'assigneeKeys',
-            'database'
+            'database',
+            'loggedIn'
         ],
         data () {
             return {
@@ -45,8 +46,7 @@
                 }
             },
             sendTaskToAssignee(assignee) {
-                this.$props.database.ref(`/${assignee}/tasks`).push({task: this.task,
-                complete: false})
+                this.$props.database.ref(`/${assignee}/tasks`).push({task: this.task, complete: false})
             }
         },
         mounted() {
