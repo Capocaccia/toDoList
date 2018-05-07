@@ -47,6 +47,7 @@
             },
             sendTaskToAssignee(assignee) {
                 this.$props.database.ref(`/${assignee}/tasks`).push({task: this.task, complete: false})
+                this.task = ''
             }
         },
         mounted() {

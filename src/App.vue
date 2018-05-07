@@ -1,7 +1,10 @@
 <template>
   <div id="app">
+    <button class="admin-access-button" @click="openAdminOrLogOut">
+      <span v-if="!loggedIn">Admin</span>
+      <span v-if="loggedIn"> Logout </span>
+    </button>
     <div class="admin-controls" v-if="!loggedIn">
-      <button @click="adminInput = !adminInput">Admin</button>
       <input placeholder="password" v-if="adminInput" v-model="password" type="password">
       <button v-if="adminInput" @click="checkAdminAccess">Submit</button>
     </div>
@@ -16,6 +19,7 @@
       :tasks="tasks"
       :taskKeys="taskKeys"
       :database="database"
+      :loggedIn="loggedIn"
     />
   </div>
 </template>
@@ -46,10 +50,16 @@ export default {
   },
   methods: {
     checkAdminAccess() {
-      console.log('here')
       if(this.password.toLowerCase() === '212ericson'){
         this.loggedIn = true
       }
+    },
+    openAdminOrLogOut() {
+        if(this.loggedIn) {
+            this.loggedIn = false
+        } else {
+            this.adminInput = !this.adminInput
+        }
     }
   },
   mounted() {
@@ -72,34 +82,6 @@ export default {
 
 </script>
 
-<style>
-
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    height: 100vh;
-    background-color: #FFC338;
-    padding: 50px;
-  }
-
-  body {
-    margin: 0;
-    padding: 0;
-  }
-
-  button {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    background: #fff;
-    border: 0;
-    font-size: 1rem;
-    cursor: pointer;
-    position: relative;
-    box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    margin: 0 .5rem;
-  }
-
+<style lang="scss">
+  @import 'scss/style.scss';
 </style>
