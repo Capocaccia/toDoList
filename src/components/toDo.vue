@@ -3,7 +3,7 @@
     <div class="inbox" v-for="(assignee, idx) in assignees">
       Tasks For: {{ assignee }}
       <div class="item" v-for="(task, idx2) in tasks[idx]">
-        <input type="checkbox" @click="completeTask(assignee, taskKeys[idx][idx2])">
+        <input type="checkbox" @click="completeTask(assignee, taskKeys[idx][idx2])" :checked=task.complete>
         <span :class="{task__complete : task.complete}"> {{ task.task }} </span>
       </div>
     </div>
