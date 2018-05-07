@@ -1,12 +1,10 @@
 <template>
   <div class="task-list">
-    <div class="list" v-for="(assignee, idx) in assignees">
-      <div class="list-title">
-        Tasks For: {{ assignee }}
-      </div>
-      <div class="task" v-for="(task, idx2) in tasks[idx]">
-        <span :class="{task__complete : task.complete}"> {{ task.task }} </span>
+    <div class="inbox" v-for="(assignee, idx) in assignees">
+      Tasks For: {{ assignee }}
+      <div class="item" v-for="(task, idx2) in tasks[idx]">
         <input type="checkbox" @click="completeTask(assignee, taskKeys[idx][idx2])">
+        <span :class="{task__complete : task.complete}"> {{ task.task }} </span>
       </div>
     </div>
   </div>
